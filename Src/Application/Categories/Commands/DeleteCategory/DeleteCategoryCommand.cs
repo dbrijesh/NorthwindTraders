@@ -20,7 +20,7 @@ namespace Northwind.Application.Categories.Commands.DeleteCategory
                 _context = context;
             }
 
-            public async Task<Unit> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
+            public async Task Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
             {
                 var entity = await _context.Categories
                     .FindAsync(request.Id);
@@ -33,8 +33,6 @@ namespace Northwind.Application.Categories.Commands.DeleteCategory
                 _context.Categories.Remove(entity);
 
                 await _context.SaveChangesAsync(cancellationToken);
-
-                return Unit.Value;
             }
         }
     }

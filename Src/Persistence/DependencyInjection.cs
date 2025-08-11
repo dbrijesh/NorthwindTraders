@@ -9,8 +9,18 @@ namespace Northwind.Persistence
     {
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<NorthwindDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("NorthwindDatabase")));
+            var useInMemoryDatabase = configuration.GetValue<bool>("UseInMemoryDatabase");
+            
+            if (useInMemoryDatabase)
+            {
+                services.AddDbContext<NorthwindDbContext>(options =>
+                    options.UseInMemoryDatabase("NorthwindTraders"));
+            }
+            else
+            {
+                services.AddDbContext<NorthwindDbContext>(options =>
+                    options.UseSqlServer(configuration.GetConnectionString("NorthwindDatabase")));
+            }
 
             services.AddScoped<INorthwindDbContext>(provider => provider.GetService<NorthwindDbContext>());
 

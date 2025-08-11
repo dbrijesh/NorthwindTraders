@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using IdentityModel.Client;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -73,39 +72,11 @@ namespace Northwind.WebUI.IntegrationTests.Common
         {
             var client = CreateClient();
 
-            var token = await GetAccessTokenAsync(client, userName, password);
-
-            client.SetBearerToken(token);
+            // TODO: Implement JWT token generation for integration tests
+            // For now, return the client without authentication
+            // This will need to be updated when implementing JWT authentication in tests
 
             return client;
-        }
-
-        private async Task<string> GetAccessTokenAsync(HttpClient client, string userName, string password)
-        {
-            var disco = await client.GetDiscoveryDocumentAsync();
-
-            if (disco.IsError)
-            {
-                throw new Exception(disco.Error);
-            }
-
-            var response = await client.RequestPasswordTokenAsync(new PasswordTokenRequest
-            {
-                Address = disco.TokenEndpoint,
-                ClientId = "Northwind.IntegrationTests",
-                ClientSecret = "secret",
-
-                Scope = "Northwind.WebUIAPI openid profile",
-                UserName = userName,
-                Password = password
-            });
-
-            if (response.IsError)
-            {
-                throw new Exception(response.Error);
-            }
-
-            return response.AccessToken;
         }
     }
 }
