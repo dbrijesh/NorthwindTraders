@@ -24,7 +24,7 @@ namespace Northwind.Application.Employees.Commands.DeleteEmployee
                 _currentUser = currentUser;
             }
 
-            public async Task<Unit> Handle(DeleteEmployeeCommand request, CancellationToken cancellationToken)
+            public async Task Handle(DeleteEmployeeCommand request, CancellationToken cancellationToken)
             {
                 var entity = await _context.Employees
                     .FindAsync(request.Id);
@@ -49,8 +49,6 @@ namespace Northwind.Application.Employees.Commands.DeleteEmployee
                 _context.Employees.Remove(entity);
 
                 await _context.SaveChangesAsync(cancellationToken);
-
-                return Unit.Value;
             }
         }
     }

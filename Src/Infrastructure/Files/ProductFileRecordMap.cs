@@ -1,4 +1,5 @@
-﻿using CsvHelper.Configuration;
+﻿using System.Globalization;
+using CsvHelper.Configuration;
 using Northwind.Application.Products.Queries.GetProductsFile;
 
 namespace Northwind.Infrastructure.Files
@@ -7,8 +8,8 @@ namespace Northwind.Infrastructure.Files
     {
         public ProductFileRecordMap()
         {
-            AutoMap();
-            Map(m => m.UnitPrice).Name("Unit Price").ConvertUsing(c => (c.UnitPrice ?? 0).ToString("C"));
+            AutoMap(CultureInfo.InvariantCulture);
+            Map(m => m.UnitPrice).Name("Unit Price").Convert(args => (args.Value.UnitPrice ?? 0).ToString("C"));
         }
     }
 }
