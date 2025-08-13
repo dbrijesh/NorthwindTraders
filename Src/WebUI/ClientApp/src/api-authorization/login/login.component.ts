@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { AuthorizeService, AuthenticationResultStatus } from '../authorize.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -10,11 +11,13 @@ import { LoginActions, QueryParameterNames, ApplicationPaths, ReturnUrlType } fr
 // let the component perform the login and return back to the return url.
 @Component({
   selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  public message = new BehaviorSubject<string>(null);
+  public message = new BehaviorSubject<string>('');
 
   constructor(
     private authorizeService: AuthorizeService,
@@ -32,7 +35,7 @@ export class LoginComponent implements OnInit {
         break;
       case LoginActions.LoginFailed:
         const message = this.activatedRoute.snapshot.queryParamMap.get(QueryParameterNames.Message);
-        this.message.next(message);
+        this.message.next(message || '');
         break;
       case LoginActions.Profile:
         this.redirectToProfile();
@@ -49,7 +52,7 @@ export class LoginComponent implements OnInit {
   private async login(returnUrl: string): Promise<void> {
     const state: INavigationState = { returnUrl };
     const result = await this.authorizeService.signIn(state);
-    this.message.next(undefined);
+    this.message.next('');
     switch (result.status) {
       case AuthenticationResultStatus.Redirect:
         // We replace the location here so that in case the user hits the back

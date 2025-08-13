@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app.routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -18,39 +19,9 @@ import { CamelCaseToText } from '../pipes/camel-case-to-text';
 
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AppIconsModule } from './app.icons.module';
-import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
-import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
+import { ApiAuthorizationModule } from '../api-authorization/api-authorization.module';
+import { AuthorizeInterceptor } from '../api-authorization/authorize.interceptor';
 import { environment } from '../environments/environment';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    NavTopMenuComponent,
-    NavSideMenuComponent,
-    HomeComponent,
-    ProductsComponent,
-    CustomersComponent,
-    CustomerDetailComponent,
-    CamelCaseToText
-  ],
-  imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    HttpClientModule,
-    FormsModule,
-    AppIconsModule,
-    AppRoutingModule,
-    ApiAuthorizationModule,
-    ModalModule.forRoot()
-  ],
-  entryComponents: [
-    CustomerDetailComponent
-  ],
-  providers: [
-      { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
-      { provide: API_BASE_URL, useValue: environment.apiBaseUrl },
-      CustomersClient,
-      ProductsClient
-  ],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
+// This module is no longer needed since we converted to standalone components
+// The app now bootstraps directly with AppComponent using app.config.ts

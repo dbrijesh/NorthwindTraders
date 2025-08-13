@@ -11,6 +11,9 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     CommonModule,
     HttpClientModule,
+    LoginMenuComponent,
+    LoginComponent,
+    LogoutComponent,
     RouterModule.forChild(
       [
         { path: ApplicationPaths.Register, component: LoginComponent },
@@ -24,7 +27,6 @@ import { HttpClientModule } from '@angular/common/http';
       ]
     )
   ],
-  declarations: [LoginMenuComponent, LoginComponent, LogoutComponent],
   exports: [LoginMenuComponent, LoginComponent, LogoutComponent]
 })
 export class ApiAuthorizationModule { }

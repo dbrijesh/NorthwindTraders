@@ -29,11 +29,32 @@ namespace Northwind.WebUI
 
                 try
                 {
+                    var configuration = services.GetRequiredService<IConfiguration>();
+                    var useInMemoryDatabase = configuration.GetValue<bool>("UseInMemoryDatabase");
+
                     var northwindContext = services.GetRequiredService<NorthwindDbContext>();
-                    northwindContext.Database.Migrate();
+                    if (useInMemoryDatabase)
+                    {
+                        // For in-memory database, just ensure it's created
+                        northwindContext.Database.EnsureCreated();
+                    }
+                    else
+                    {
+                        // For SQL Server, run migrations
+                        northwindContext.Database.Migrate();
+                    }
 
                     var identityContext = services.GetRequiredService<ApplicationDbContext>();
-                    identityContext.Database.Migrate();
+                    if (useInMemoryDatabase)
+                    {
+                        // For in-memory database, just ensure it's created
+                        identityContext.Database.EnsureCreated();
+                    }
+                    else
+                    {
+                        // For SQL Server, run migrations
+                        identityContext.Database.Migrate();
+                    }
 
                     var mediator = services.GetRequiredService<IMediator>();
                     await mediator.Send(new SeedSampleDataCommand(), CancellationToken.None);

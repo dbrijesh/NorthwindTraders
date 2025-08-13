@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { AuthenticationResultStatus, AuthorizeService } from '../authorize.service';
 import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,11 +11,13 @@ import { LogoutActions, ApplicationPaths, ReturnUrlType } from '../api-authoriza
 // user clicks on the logout button on the LoginMenu component.
 @Component({
   selector: 'app-logout',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './logout.component.html',
   styleUrls: ['./logout.component.css']
 })
 export class LogoutComponent implements OnInit {
-  public message = new BehaviorSubject<string>(null);
+  public message = new BehaviorSubject<string>('');
 
   constructor(
     private authorizeService: AuthorizeService,

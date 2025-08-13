@@ -1,9 +1,14 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs"
+    "outDir": "../out-tsc/server",
+    "target": "ES2022",
+    "module": "ES2022",
+    "types": [
+      "node"
+    ]
   },
-  "angularCompilerOptions": {
-    "entryModule": "app/app.server.module#AppServerModule"
-  }
+  "files": [
+    "main.server.ts"
+  ]
 }
