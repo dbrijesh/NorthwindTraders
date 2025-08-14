@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using CsvHelper;
+using CsvHelper.Configuration;
 using Northwind.Application.Common.Interfaces;
 using Northwind.Application.Products.Queries.GetProductsFile;
 
@@ -13,8 +15,9 @@ namespace Northwind.Infrastructure.Files
             using var memoryStream = new MemoryStream();
             using (var streamWriter = new StreamWriter(memoryStream))
             {
-                using var csvWriter = new CsvWriter(streamWriter);
-                csvWriter.Configuration.RegisterClassMap<ProductFileRecordMap>();
+                var config = new CsvConfiguration(CultureInfo.InvariantCulture);
+                using var csvWriter = new CsvWriter(streamWriter, config);
+                csvWriter.Context.RegisterClassMap<ProductFileRecordMap>();
                 csvWriter.WriteRecords(records);
             }
 

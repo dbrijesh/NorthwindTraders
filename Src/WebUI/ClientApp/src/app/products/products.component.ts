@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ProductsClient, ProductsListVm } from '../northwind-traders-api';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './products.component.html'
 })
 export class ProductsComponent {

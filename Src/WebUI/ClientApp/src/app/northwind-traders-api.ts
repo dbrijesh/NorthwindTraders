@@ -539,7 +539,7 @@ export class EmployeesClient implements IEmployeesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<EmployeeLookupDto[]>(<any>null);
+        return _observableOf<EmployeeLookupDto[]>([]);
     }
 
     get(id: number): Observable<EmployeeDetailVm> {
@@ -1312,6 +1312,7 @@ export interface ICustomerLookupDto {
 }
 
 export class CustomerDetailVm implements ICustomerDetailVm {
+    [key: string]: any;
     id?: string | undefined;
     address?: string | undefined;
     city?: string | undefined;
@@ -2143,7 +2144,7 @@ export interface FileResponse {
 }
 
 export class SwaggerException extends Error {
-    message: string;
+    override message: string;
     status: number; 
     response: string; 
     headers: { [key: string]: any; };

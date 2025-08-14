@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Northwind.Infrastructure;
@@ -45,8 +46,11 @@ namespace Northwind.WebUI
 
             services
                 .AddControllersWithViews()
-                .AddNewtonsoftJson()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<INorthwindDbContext>());
+                .AddNewtonsoftJson();
+
+            services.AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters()
+                .AddValidatorsFromAssemblyContaining<INorthwindDbContext>();
 
             services.AddRazorPages();
 
@@ -67,6 +71,18 @@ namespace Northwind.WebUI
                 configure.Title = "Northwind Traders API";
             });
 
+            // Add CORS for Angular development server
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngularDev", policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200", "https://localhost:4200")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+                });
+            });
+
             _services = services;
         }
 
@@ -76,7 +92,7 @@ namespace Northwind.WebUI
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                app.UseDeveloperExceptionPage();
                 RegisteredServicesPage(app);
             }
             else
@@ -94,7 +110,7 @@ namespace Northwind.WebUI
 
             app.UseOpenApi();
 
-            app.UseSwaggerUi3(settings =>
+            app.UseSwaggerUi(settings =>
             {
                 settings.Path = "/api";
                 //    settings.DocumentPath = "/api/specification.json";   Enable when NSwag.MSBuild is upgraded to .NET Core 3.0
@@ -102,8 +118,13 @@ namespace Northwind.WebUI
 
             app.UseRouting();
 
+            // Enable CORS for Angular development server
+            if (Environment.IsDevelopment())
+            {
+                app.UseCors("AllowAngularDev");
+            }
+
             app.UseAuthentication();
-            app.UseIdentityServer();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

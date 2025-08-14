@@ -1,14 +1,18 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { CustomerDetailVm } from '../northwind-traders-api';
 import { BsModalRef } from 'ngx-bootstrap/modal';
+import { CamelCaseToText } from '../../pipes/camel-case-to-text';
 
 @Component({
   selector: 'app-customer-detail',
+  standalone: true,
+  imports: [CommonModule, CamelCaseToText],
   templateUrl: './customer-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerDetailComponent implements OnInit {
-  public customer: CustomerDetailVm;
+  public customer!: CustomerDetailVm;
   public detailKeys: string[] = [];
 
   constructor(private bsModalRef: BsModalRef) {}

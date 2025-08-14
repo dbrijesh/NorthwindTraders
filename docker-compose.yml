@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  northwind-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      # Database connection (using in-memory by default)
+      - UseInMemoryDatabase=true
+      # JWT settings
+      - JwtSettings__Secret=your-super-secret-jwt-key-here-make-it-long-and-secure
+      - JwtSettings__Issuer=NorthwindTraders
+      - JwtSettings__Audience=NorthwindTradersUsers
+      - JwtSettings__ExpiryMinutes=60
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  # Optional: Add SQL Server if you want to use a real database
+  # sqlserver:
+  #   image: mcr.microsoft.com/mssql/server:2022-latest
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #     - SA_PASSWORD=YourStrong@Passw0rd
+  #   ports:
+  #     - "1433:1433"
+  #   volumes:
+  #     - sqlserver_data:/var/opt/mssql
+  #   restart: unless-stopped
+
+# volumes:
+#   sqlserver_data:

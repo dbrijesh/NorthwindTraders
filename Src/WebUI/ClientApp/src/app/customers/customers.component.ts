@@ -1,16 +1,19 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { CustomersClient, CustomersListVm } from '../northwind-traders-api';
 import { CustomerDetailComponent } from '../customer-detail/customer-detail.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-customers',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './customers.component.html'
 })
 export class CustomersComponent {
 
   public vm: CustomersListVm = new CustomersListVm();
-  private bsModalRef: BsModalRef;
+  private bsModalRef!: BsModalRef;
 
   constructor(private client: CustomersClient, private modalService: BsModalService) {
     client.getAll().subscribe(result => {
